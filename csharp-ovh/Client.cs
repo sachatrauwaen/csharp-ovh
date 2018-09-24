@@ -77,10 +77,7 @@ namespace Ovh.Api
         private const int _defaultTimeout = 180;
         private readonly WebClient _webClient;
 
-        /// <summary>
-        /// Configuration manager used by this <c>Client</c>
-        /// </summary>
-        public ConfigurationManager ConfigurationManager { get; set; }
+        
         /// <summary>
         /// API Endpoint that this <c>Client</c> targets
         /// </summary>
@@ -159,14 +156,7 @@ namespace Ovh.Api
             string applicationSecret = null, string consumerKey = null,
             int timeout = _defaultTimeout) : this()
         {
-            ConfigurationManager = new ConfigurationManager();
-
-            //Endpoint
-            if (string.IsNullOrWhiteSpace(endpoint))
-            {
-                endpoint = ConfigurationManager.Get("default", "endpoint");
-            }
-
+            
             try
             {
                 Endpoint = _endpoints[endpoint];
@@ -179,49 +169,13 @@ namespace Ovh.Api
             }
 
             //ApplicationKey
-            if (string.IsNullOrWhiteSpace(applicationKey))
-            {
-                string tempApplicationKey;
-                if(ConfigurationManager.TryGet(
-                    endpoint, "application_key", out tempApplicationKey))
-                {
-                    ApplicationKey = tempApplicationKey;
-                }
-            }
-            else
-            {
                 ApplicationKey = applicationKey;
-            }
 
             //SecretKey
-            if (string.IsNullOrWhiteSpace(applicationSecret))
-            {
-                string tempAppSecret;
-                if (ConfigurationManager.TryGet(
-                    endpoint, "application_secret", out tempAppSecret))
-                {
-                    ApplicationSecret = tempAppSecret;
-                }
-            }
-            else
-            {
                 ApplicationSecret = applicationSecret;
-            }
 
             //ConsumerKey
-            if (string.IsNullOrWhiteSpace(consumerKey))
-            {
-                string tempConsumerKey;
-                if (ConfigurationManager.TryGet(
-                    endpoint, "consumer_key", out tempConsumerKey))
-                {
-                    ConsumerKey = tempConsumerKey;
-                }
-            }
-            else
-            {
                 ConsumerKey = consumerKey;
-            }
 
             //Timeout
             Timeout = timeout;
